@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCTO Technology Studio | Premium Solutions</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ["'Instrument Serif'", "serif"],
+                        body: ["'Barlow'", "sans-serif"],
+                    },
+                    colors: {
+                        octoPurpura: '#8A5CF6',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #000; color: #fff; font-family: 'Barlow', sans-serif; overflow-x: hidden; }
+        .font-heading { font-family: 'Instrument Serif', serif; }
+        
+        /* Estilo Liquid Glass del Brandbook */
+        .liquid-glass-strong {
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+        }
+
+        .liquid-glass-strong::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1.4px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0.5) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .pricing-card { background: #101014; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; }
+        .pricing-card:hover { border-color: #8A5CF6; }
+
+        /* Scroll suave */
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <!-- Scripts Necesarios -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        const { motion, AnimatePresence } = window.Motion;
+
+        // Icon Component para Lucide
+        const Icon = ({ name, size = 20, className = "" }) => {
+            return <i data-lucide={name} className={className} style={{ width: size, height: size }}></i>;
+        };
+
+        const WhatsAppButton = () => (
+            <a href="https://wa.me/525512955401" target="_blank" className="fixed bottom-8 right-8 z-[100] bg-[#25D366] p-4 rounded-full shadow-2xl hover:scale-110 transition-transform text-white flex items-center justify-center">
+                <Icon name="message-circle" size={32} />
+            </a>
+        );
+
+        const Hero = () => (
+            <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+                {/* Logo background animation */}
+                <motion.div 
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                    className="absolute opacity-20 blur-3xl w-[600px] md:w-[900px] pointer-events-none"
+                >
+                    <img src="./logo.png" className="w-full" alt="" />
+                </motion.div>
+
+                <div className="relative z-10">
+                    <motion.img 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        src="./logo.png" 
+                        className="w-32 md:w-48 mx-auto mb-10" 
+                        alt="OCTO Logo" 
+                    />
+                    <h1 className="text-5xl md:text-8xl font-heading italic leading-[0.9] mb-8">
+                        Tecnología que hace crecer <br /> <span className="text-octoPurpura">tu negocio.</span>
+                    </h1>
+                    <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-12">
+                        Creamos websites, tiendas online y agentes de AI para que tu negocio venda más y opere mejor.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                        <button className="bg-octoPurpura text-white px-10 py-5 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-octoPurpura/80 transition-all">
+                            Quiero digitalizar mi negocio
+                        </button>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const PricingSection = () => {
+            const plans = [
+                {
+                    title: "Básico", tagline: "Presencia profesional.", price: "$4,990", icon: "rocket",
+                    features: ["Landing page profesional", "WhatsApp integrado", "Diseño responsive", "SEO básico", "Entrega en 7-10 días", "Soporte básico"]
+                },
+                {
+                    title: "Crecimiento", tagline: "Captación de clientes.", price: "$8,490", icon: "bar-chart-3",
+                    features: ["Sitio web hasta 5 páginas", "WhatsApp integrado", "SEO inicial", "Formulario de contacto", "Google Maps", "Entrega 10-14 días"]
+                },
+                {
+                    title: "OCTO+", tagline: "Relación continua.", price: "$2,990", icon: "crown", isPopular: true, sub: "+ $1,490 MXN / mes",
+                    features: ["Sitio web completo", "WhatsApp + automatizaciones", "SEO avanzado", "Cambios continuos", "Soporte 24/7", "Reportes mensuales"]
+                }
+            ];
+
+            return (
+                <section className="py-32 px-6 bg-black">
+                    <div className="container mx-auto grid lg:grid-cols-3 gap-8 max-w-6xl">
+                        {plans.map((p, i) => (
+                            <div key={i} className={`pricing-card p-10 rounded-[2.5rem] flex flex-col relative ${p.isPopular ? 'border-octoPurpura shadow-[0_0_40px_rgba(138,92,246,0.1)]' : ''}`}>
+                                {p.isPopular && <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-octoPurpura text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest">Recomendado</div>}
+                                <div className="flex items-center gap-4 mb-8">
+                                    <div className="text-octoPurpura bg-white/5 p-3 rounded-xl"><Icon name={p.icon} size={28} /></div>
+                                    <div><h3 className="text-xl font-bold">{p.title}</h3><p className="text-white/40 text-xs">{p.tagline}</p></div>
+                                </div>
+                                <ul className="space-y-4 mb-12 flex-grow text-sm text-white/70">
+                                    {p.features.map(f => <li key={f} className="flex gap-3"><Icon name="check" className="text-octoPurpura" size={18}/>{f}</li>)}
+                                </ul>
+                                <div className="pt-8 border-t border-white/5">
+                                    <p className="text-[10px] text-white/40 uppercase font-bold mb-2">Desde</p>
+                                    <div className="flex items-baseline gap-2"><span className="text-4xl font-bold">{p.price}</span><span className="text-white/40 text-xs">MXN</span></div>
+                                    <p className="text-octoPurpura text-xs mt-2 mb-8 font-medium">{p.sub || 'Pago único'}</p>
+                                    <button className={`w-full py-4 rounded-2xl font-bold text-[10px] uppercase tracking-widest ${p.isPopular ? 'bg-octoPurpura' : 'bg-white/5 hover:bg-white/10'}`}>Cotizar</button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        };
+
+        const CtaFooter = () => {
+            const videoRef = useRef(null);
+            useEffect(() => {
+                const src = "https://stream.mux.com/8wrHPCX2dC3msyYU9ObwqNdm00u3ViXvOSHUMRYSEe5Q.m3u8";
+                if (Hls.isSupported()) {
+                    const hls = new Hls();
+                    hls.loadSource(src);
+                    hls.attachMedia(videoRef.current);
+                } else if (videoRef.current.canPlayType("application/vnd.apple.mpegurl")) {
+                    videoRef.current.src = src;
+                }
+            }, []);
+
+            return (
+                <section className="relative py-40 px-6 text-center overflow-hidden bg-black">
+                    <video ref={videoRef} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0 opacity-50" />
+                    <div className="absolute top-0 w-full h-40 bg-gradient-to-b from-black to-transparent z-[1]" />
+                    <div className="absolute bottom-0 w-full h-40 bg-gradient-to-t from-black to-transparent z-[1]" />
+                    
+                    <div className="relative z-10 max-w-4xl mx-auto">
+                        <h2 className="text-5xl md:text-8xl font-heading italic mb-8 leading-[0.85]">Your next website <br/> starts here.</h2>
+                        <p className="text-white/60 mb-12 max-w-lg mx-auto font-light">Book a free strategy call. See what AI-powered design can do. No commitment, just possibilities.</p>
+                        <div className="flex justify-center gap-6 mb-32">
+                            <button className="liquid-glass-strong px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest flex items-center gap-2">Book a call <Icon name="arrow-up-right" size={16}/></button>
+                            <button className="bg-white text-black px-8 py-4 rounded-full text-xs font-bold uppercase tracking-widest">View Pricing</button>
+                        </div>
+                        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between text-[10px] text-white/40 uppercase tracking-widest font-bold gap-4">
+                            <p>© 2025 OCTO Technology Studio. All rights reserved.</p>
+                            <div className="flex gap-8"><span>Privacy</span><span>Terms</span><span>Contact</span></div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const App = () => {
+            useEffect(() => { lucide.createIcons(); }, []);
+            return (
+                <main>
+                    <Hero />
+                    <PricingSection />
+                    <CtaFooter />
+                    <WhatsAppButton />
+                </main>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
