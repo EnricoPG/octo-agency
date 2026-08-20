@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCTO Technology Studio | Elite Digital Engineering</title>
+    
+    <!-- SEO & Fonts -->
+    <meta name="description" content="Agencia boutique de tecnología en México. Especialistas en Websites, AI y Automatización para PyMEs de alto nivel.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ["'Instrument Serif'", "serif"],
+                        body: ["'Barlow'", "sans-serif"],
+                    },
+                    colors: {
+                        octoBlack: '#08080A',
+                        octoGray: '#101014',
+                        octoPurple: '#8A5CF6',
+                        octoAccent: '#7C3AED',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #08080A; color: #F7F7F8; font-family: 'Barlow', sans-serif; overflow-x: hidden; }
+        .font-heading { font-family: 'Instrument Serif', serif; }
+        
+        /* LIQUID GLASS STRONG CSS */
+        .liquid-glass-strong {
+            background: rgba(255, 255, 255, 0.01);
+            background-blend-mode: luminosity;
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
+            border: none;
+            box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .liquid-glass-strong::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1.4px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.2) 20%, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0.2) 80%, rgba(255, 255, 255, 0.5) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* Animations */
+        .glow-radial {
+            background: radial-gradient(circle at 50% 50%, rgba(138, 92, 246, 0.1) 0%, transparent 70%);
+        }
+
+        .floating { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #1F1F23; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8A5CF6; }
+    </style>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <!-- SDKs -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        const { motion, AnimatePresence, useScroll, useTransform } = window.Motion;
+
+        const Icon = ({ name, size = 20, className = "" }) => {
+            useEffect(() => { lucide.createIcons(); }, []);
+            return <i data-lucide={name} className={className} style={{ width: size, height: size }}></i>;
+        };
+
+        // --- COMPONENTS ---
+
+        const Navbar = () => (
+            <nav className="fixed top-0 w-full z-[100] py-6 bg-transparent">
+                <div className="container mx-auto px-6 flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                        <img src="./logo.png" className="w-8 h-8 object-contain" alt="Logo" />
+                        <span className="text-xl font-bold tracking-[0.3em] uppercase">OCTO</span>
+                    </div>
+                    <div className="hidden md:flex gap-10 items-center">
+                        <a href="#ecosistema" className="text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors">Ecosistema</a>
+                        <a href="#precios" className="text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors">Planes</a>
+                        <a href="#contacto" className="liquid-glass-strong px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest">Hablemos</a>
+                    </div>
+                </div>
+            </nav>
+        );
+
+        const Hero = () => {
+            const { scrollY } = useScroll();
+            const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+
+            return (
+                <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden pt-20">
+                    <motion.div style={{ y: y1 }} className="absolute w-[600px] md:w-[1000px] opacity-10 pointer-events-none">
+                        <img src="./logo.png" className="w-full floating" alt="" />
+                    </motion.div>
+
+                    <div className="relative z-10">
+                        <motion.img 
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            src="./logo.png" className="w-24 md:w-36 mx-auto mb-10 drop-shadow-[0_0_50px_rgba(138,92,246,0.4)]" 
+                        />
+                        <h1 className="text-6xl md:text-[9rem] font-heading italic leading-[0.8] mb-10 tracking-tighter">
+                            Estrategia que <br /> <span className="text-octoPurple">impulsa.</span>
+                        </h1>
+                        <p className="text-white/40 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-light leading-relaxed">
+                            Diseñamos e integramos soluciones tecnológicas para PyMEs que buscan dominar su mercado sin complicaciones técnicas.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                            <a href="#contacto" className="bg-octoPurple text-white px-10 py-5 rounded-full font-bold text-[10px] uppercase tracking-[0.2em] hover:scale-105 transition-all">Empezar ahora</a>
+                            <a href="#ecosistema" className="liquid-glass-strong px-10 py-5 rounded-full text-[10px] font-bold uppercase tracking-[0.2em]">Ver Soluciones</a>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const Ecosystem = () => {
+            const nodes = [
+                { name: "Website", x: "20%", y: "20%", icon: "monitor" },
+                { name: "E-commerce", x: "80%", y: "25%", icon: "shopping-bag" },
+                { name: "AI Agent", x: "50%", y: "15%", icon: "bot" },
+                { name: "Automación", x: "15%", y: "70%", icon: "zap" },
+                { name: "Sistemas", x: "85%", y: "75%", icon: "cpu" },
+                { name: "Pagos", x: "50%", y: "85%", icon: "credit-card" }
+            ];
+
+            return (
+                <section id="ecosistema" className="py-32 relative bg-octoBlack overflow-hidden">
+                    <div className="container mx-auto px-6 relative z-10">
+                        <div className="text-center mb-24">
+                            <h2 className="text-5xl md:text-7xl font-heading italic mb-4">Un ecosistema <span className="text-octoPurple">conectado.</span></h2>
+                            <p className="text-white/40 uppercase tracking-[0.3em] text-[10px] font-black">No hacemos herramientas aisladas.</p>
+                        </div>
+
+                        <div className="relative h-[600px] w-full">
+                            {/* Central Logo */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+                                <div className="p-8 bg-octoGray border border-octoPurple/30 rounded-full shadow-[0_0_60px_rgba(138,92,246,0.2)]">
+                                    <img src="./logo.png" className="w-16 h-16" />
+                                </div>
+                            </div>
+
+                            {/* Nodes */}
+                            {nodes.map((node, i) => (
+                                <motion.div 
+                                    key={i}
+                                    initial={{ opacity: 0 }}
+                                    whileInView={{ opacity: 1 }}
+                                    className="absolute flex flex-col items-center gap-3 group"
+                                    style={{ left: node.x, top: node.y }}
+                                >
+                                    <div className="p-5 bg-octoGray border border-white/5 rounded-2xl group-hover:border-octoPurple transition-all cursor-pointer">
+                                        <Icon name={node.icon} className="text-octoPurple" />
+                                    </div>
+                                    <span className="text-[9px] font-black uppercase tracking-widest text-white/30 group-hover:text-white">{node.name}</span>
+                                </motion.div>
+                            ))}
+
+                            {/* SVG Connections (Animated) */}
+                            <svg className="absolute inset-0 w-full h-full opacity-10 pointer-events-none">
+                                {nodes.map((n, i) => (
+                                    <line key={i} x1="50%" y1="50%" x2={n.x} y2={n.y} stroke="white" strokeWidth="0.5" strokeDasharray="5,5" />
+                                ))}
+                            </svg>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const Pricing = () => {
+            const plans = [
+                {
+                    title: "Básico", tag: "Presencia profesional.", price: "$4,990", icon: "rocket", color: "pink",
+                    features: ["Landing page profesional", "WhatsApp integrado", "Diseño responsive", "SEO básico", "Entrega 7-10 días", "Soporte básico (15 días)"]
+                },
+                {
+                    title: "Crecimiento", tag: "Captación de clientes.", price: "$8,490", icon: "bar-chart-3", color: "blue",
+                    features: ["Sitio web hasta 5 páginas", "WhatsApp integrado", "SEO On-page inicial", "Formulario de contacto", "Google Maps", "Entrega 10-14 días", "Soporte 60 días"]
+                },
+                {
+                    title: "OCTO+", tag: "Relación continua.", price: "$2,990", icon: "crown", color: "purple", isPopular: true, sub: "+ $1,490 MXN / mes",
+                    features: ["Sitio web completo", "WhatsApp + Automatizaciones", "SEO avanzado", "Google Maps", "Cambios continuos", "Optimización mensual", "Reportes de rendimiento", "Entrega 7-10 días"]
+                }
+            ];
+
+            return (
+                <section id="precios" className="py-32 px-6 bg-octoBlack">
+                    <div className="container mx-auto grid lg:grid-cols-3 gap-8 max-w-7xl">
+                        {plans.map((p, i) => (
+                            <div key={i} className={`relative flex flex-col p-10 rounded-[2.5rem] bg-[#101014] border ${p.isPopular ? 'border-octoPurple shadow-[0_0_40px_rgba(138,92,246,0.1)]' : 'border-white/5'}`}>
+                                {p.isPopular && <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-octoPurple text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest">Recomendado</div>}
+                                
+                                <div className="flex items-center gap-4 mb-8">
+                                    <div className={`p-4 rounded-2xl bg-white/5 ${p.color === 'pink' ? 'text-pink-500' : p.color === 'blue' ? 'text-blue-400' : 'text-orange-400'}`}>
+                                        <Icon name={p.icon} size={28} />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-2xl font-bold">{p.title}</h3>
+                                        <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">{p.tag}</p>
+                                    </div>
+                                </div>
+
+                                <ul className="space-y-4 mb-12 flex-grow">
+                                    {p.features.map((f, j) => (
+                                        <li key={j} className="flex gap-3 text-sm text-white/60 font-light"><Icon name="check" size={16} className="text-octoPurple mt-0.5" />{f}</li>
+                                    ))}
+                                </ul>
+
+                                <div className="pt-8 border-t border-white/5">
+                                    <p className="text-[10px] text-white/30 uppercase font-black tracking-widest mb-2">Desde</p>
+                                    <div className="flex items-baseline gap-2"><span className="text-4xl font-bold">{p.price}</span><span className="text-white/30 text-xs font-bold uppercase">MXN</span></div>
+                                    <p className="text-octoPurple text-xs mt-2 mb-10 font-bold">{p.sub || 'Pago único'}</p>
+                                    <button className={`w-full py-5 rounded-2xl font-bold text-[10px] uppercase tracking-[0.2em] ${p.isPopular ? 'bg-octoPurple text-white shadow-lg shadow-octoPurple/20' : 'bg-white/5 hover:bg-white/10'}`}>Cotizar</button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            );
+        };
+
+        const CinematicCTA = () => {
+            const videoRef = useRef(null);
+            useEffect(() => {
+                const src = "https://stream.mux.com/8wrHPCX2dC3msyYU9ObwqNdm00u3ViXvOSHUMRYSEe5Q.m3u8";
+                if (Hls.isSupported()) {
+                    const hls = new Hls(); hls.loadSource(src); hls.attachMedia(videoRef.current);
+                } else if (videoRef.current.canPlayType("application/vnd.apple.mpegurl")) {
+                    videoRef.current.src = src;
+                }
+            }, []);
+
+            return (
+                <section id="contacto" className="relative py-48 px-6 text-center overflow-hidden bg-black">
+                    <video ref={videoRef} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 mix-blend-screen" />
+                    <div className="absolute top-0 w-full h-64 bg-gradient-to-b from-octoBlack to-transparent z-[1]" />
+                    <div className="absolute bottom-0 w-full h-64 bg-gradient-to-t from-octoBlack to-transparent z-[1]" />
+
+                    <div className="relative z-10 max-w-6xl mx-auto">
+                        <h2 className="text-6xl md:text-[10rem] font-heading italic leading-[0.8] mb-12 tracking-tighter">Your next website <br/> starts here.</h2>
+                        <p className="text-white/50 text-lg md:text-xl mb-16 max-w-lg mx-auto font-light leading-relaxed">Book a free strategy call. See what AI-powered design can do. No commitment, just possibilities.</p>
+                        
+                        <div className="flex flex-col sm:flex-row justify-center gap-8 mb-48">
+                            <a href="https://wa.me/525512955401" className="bg-white text-black px-12 py-5 rounded-full font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 hover:scale-105 transition-all">Book a call <Icon name="arrow-up-right" size={16}/></a>
+                            <a href="#precios" className="liquid-glass-strong px-12 py-5 rounded-full text-[10px] font-bold uppercase tracking-widest">View Pricing</a>
+                        </div>
+
+                        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between text-[10px] text-white/30 uppercase tracking-[0.4em] font-black gap-10">
+                            <div className="flex items-center gap-3"><img src="./logo.png" className="w-5 h-5 opacity-40" /><p>© 2025 OCTO TECHNOLOGY STUDIO.</p></div>
+                            <div className="flex gap-10"><a href="#" className="hover:text-white transition-colors">Privacy</a><a href="#" className="hover:text-white transition-colors">Terms</a><a href="https://wa.me/525512955401" className="hover:text-white transition-colors">WhatsApp</a></div>
+                        </div>
+                    </div>
+                </section>
+            );
+        };
+
+        const WhatsAppFloating = () => (
+            <a href="https://wa.me/525512955401" target="_blank" className="fixed bottom-10 right-10 z-[200] bg-[#25D366] p-5 rounded-full shadow-[0_15px_40px_rgba(37,211,102,0.4)] hover:scale-110 transition-transform text-white">
+                <Icon name="message-circle" size={32} />
+            </a>
+        );
+
+        const App = () => {
+            useEffect(() => { lucide.createIcons(); }, []);
+            return (
+                <main className="selection:bg-octoPurple selection:text-white">
+                    <Navbar />
+                    <Hero />
+                    <Ecosystem />
+                    <Pricing />
+                    <CinematicCTA />
+                    <WhatsAppFloating />
+                </main>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
